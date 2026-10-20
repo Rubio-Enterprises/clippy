@@ -1,77 +1,30 @@
-name: PR Tests
+name: PR Lint and Build
 
-on:
+"on":
   pull_request:
-    branches: [main]
-    paths:
-      - '**.go'
-      - 'go.mod'
-      - 'go.sum'
-      - 'cmd/clippy/testdata/**'
-      - 'scripts/picker_snapshot_tmux.sh'
-      - '.github/workflows/pr-test.yml'
+  merge_group:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
 jobs:
-  test:
-    runs-on: macos-14
+  lint-build:
+    runs-on: ${{ fromJSON(vars.RUNNERS || '{}').macos || fromJSON('["macos-15"]') }}
+    timeout-minutes: 20
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.25'
-          cache: true
-
-      - name: Run tests
-        run: |
-          # Run tests sequentially to avoid clipboard conflicts between packages.
-          go test -v -p 1 ./...
-
-      - name: Ensure tmux is available
-        run: |
-          if ! command -v tmux >/dev/null 2>&1; then
-            brew install tmux
-          fi
-          tmux -V
-
-      - name: Run TUI snapshot regression
-        run: |
-          if ! command -v tmux >/dev/null 2>&1; then
-            echo "tmux is required for TUI snapshot tests"
-            exit 1
-          fi
-          ./scripts/picker_snapshot_tmux.sh
-
-      - name: Install golangci-lint
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.5.0
-
-      - name: Run linter
-        run: golangci-lint run --timeout=5m
-
-      - name: Build clippy
-        run: go build -o clippy ./cmd/clippy
-
-      - name: Build pasty
-        run: go build -o pasty ./cmd/pasty
-
-      - name: Verify builds work
-        run: |
-          ./clippy --version
-          ./pasty --version
-
-      - name: Upload binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: clippy-pasty-binaries-macos
-          path: |
-            clippy
-            pasty
-          retention-days: 7
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4
+      - name: Lint fork changes
+        env:
+          LINT_BASE_REF: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+        run: mise run lint
+      - name: Build CLI tools
+        run: mise run build

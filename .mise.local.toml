@@ -1,0 +1,16 @@
+[tools]
+go = "1.25.3"
+"aqua:golangci/golangci-lint" = "2.5.0"
+"aqua:jqlang/jq" = "1.8.2"
+
+[tasks.lint]
+description = "Lint fork changes without gating inherited upstream debt (macOS only)"
+run = 'golangci-lint run --new-from-merge-base="${LINT_BASE_REF:-main}"'
+
+[tasks.test]
+description = "Run uncached sequential Go tests and the TUI snapshot under the pasteboard lock"
+run = "bash scripts/test-go.sh"
+
+[tasks.build]
+description = "Build clippy and pasty on macOS"
+run = "go build ./cmd/clippy ./cmd/pasty"
