@@ -121,6 +121,7 @@ Examples:
 
   # Render Markdown for rich paste into Gmail and other email composers
   clippy md2rich                       # Read Markdown from clipboard, replace it with rich content
+  clippy md2teams notes.md             # Render Markdown as Teams-ready HTML and RTF
 
 Configuration:
   Create ~/.clippy.conf with:
@@ -257,6 +258,7 @@ Available tools:
 - clipboard_copy: Copy text or files to clipboard
 - copy_email: Copy a Markdown email draft as Gmail-ready rich text
 - copy_slack: Copy a Markdown message as a native Slack message
+- copy_teams: Copy a Markdown message as Teams-ready HTML and RTF
 - clipboard_paste: Paste clipboard content to files
 - get_recent_downloads: List recently downloaded files
 
@@ -291,6 +293,7 @@ Add to ~/Library/Application Support/Claude/claude_desktop_config.json:
 
 	rootCmd.AddCommand(mcpCmd)
 	rootCmd.AddCommand(newMD2RichCommand())
+	rootCmd.AddCommand(newMD2TeamsCommand())
 	rootCmd.AddCommand(newMD2SlackCommand())
 
 	// Execute the command
@@ -358,6 +361,46 @@ fallbacks for applications that do not accept HTML.`,
 			}
 			if verbose {
 				fmt.Fprintln(os.Stderr, "✅ Rendered Markdown as rich text")
+			}
+			return nil
+		},
+	}
+}
+
+func newMD2TeamsCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:   "md2teams [file.md]",
+		Short: "Render Markdown for rich Microsoft Teams paste",
+		Long: `Render Markdown as a full UTF-8 HTML document with an RTF fallback.
+
+Reads the named file, piped stdin, or the current clipboard contents.
+
+Teams on macOS has been observed to render rich pastes when HTML is a complete
+document and no plain text is available. Clippy writes HTML and RTF only, never
+a plain-text representation. However, macOS may synthesize plain text from RTF;
+Teams rendering is not verified by copying successfully.
+
+Plain-text-only apps (Terminal, editors) paste nothing unless macOS supplies
+RTF-derived text. Re-running md2teams on its own output finds no Markdown
+source on the clipboard: it may find only that synthesized, unformatted text.
+
+Use CommonMark/GFM syntax, including **bold** and ~~strikethrough~~.
+
+Examples:
+  clippy md2teams notes.md
+  cat release-notes.md | clippy md2teams
+  clippy md2teams            # renders Markdown already on the clipboard`,
+		Args: cobra.MaximumNArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			markdown, err := markdownInput(args)
+			if err != nil {
+				return err
+			}
+			if err := clippy.CopyTeams(markdown); err != nil {
+				return err
+			}
+			if verbose {
+				fmt.Fprintln(os.Stderr, "✅ Rendered Markdown as Teams-ready rich text")
 			}
 			return nil
 		},

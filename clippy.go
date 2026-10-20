@@ -201,6 +201,24 @@ func CopyMarkdown(markdown string) error {
 	return nil
 }
 
+// CopyTeams renders Markdown as a full HTML document and copies it with RTF
+// for rich applications. It writes no plain-text representation, but macOS may
+// synthesize text from RTF. Empty Markdown leaves the clipboard unchanged.
+func CopyTeams(markdown string) error {
+	if strings.TrimSpace(markdown) == "" {
+		return fmt.Errorf("markdown is required")
+	}
+	richText, err := transform.MarkdownToTeamsRichText(markdown)
+	if err != nil {
+		return fmt.Errorf("could not render markdown: %w", err)
+	}
+
+	if err := clipboard.CopyTeamsRichText(richText.HTML, richText.RTF); err != nil {
+		return fmt.Errorf("could not copy rendered markdown: %w", err)
+	}
+	return nil
+}
+
 // CopySlack renders Markdown as a Slack message and copies it in Slack's own
 // clipboard format plus plain text. Pasting into Slack's composer produces
 // native formatting, as though the message had been written there directly.

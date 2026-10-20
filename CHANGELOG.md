@@ -4,6 +4,10 @@ Notable changes to clippy.
 
 ## [Unreleased]
 
+### Added
+
+- **Teams-ready Markdown** — `clippy md2teams` and the `copy_teams` MCP tool reuse `md2rich` formatting inside a complete UTF-8 HTML document, with RTF as a fallback for rich applications. Teams on macOS has been observed to render the HTML when it is a complete document and no plain text is available. Clippy writes one item with HTML and RTF, never a plain-text representation; macOS 26.5.1 may still synthesize plain text from RTF during in-process reads, so copying successfully does not verify Teams rendering. Plain-text-only apps receive nothing unless the system supplies that synthesized text, and re-running the command on its own output does not recover the original Markdown. Input can come from a file, piped stdin, or the clipboard; the MCP tool only copies and never sends or posts
+
 ## [1.9.1] - 2026-09-04
 
 ### Fixed
