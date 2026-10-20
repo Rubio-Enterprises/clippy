@@ -5,12 +5,8 @@ if [[ -n "${RUBIO_TEST_GATE_COUNT_OUTPUT:-}" ]]; then
   rm -f "$RUBIO_TEST_GATE_COUNT_OUTPUT"
 fi
 
-LOCK=/tmp/clippy-pasteboard.lock
-until mkdir "$LOCK" 2>/dev/null; do sleep 5; done
-trap 'rmdir "$LOCK"' EXIT
-
 results=$(mktemp)
-trap 'rm -f "$results"; rmdir "$LOCK"' EXIT
+trap 'rm -f "$results"' EXIT
 mkdir -p reports/unit
 gotestsum --junitfile=reports/unit/junit.xml --jsonfile="$results" -- -count=1 -p 1 ./...
 count=$(jq -s '[.[] | select(.Action == "pass" and .Test != null)] | length' "$results")

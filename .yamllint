@@ -70,7 +70,7 @@ ignore:
   - go.sum
   - bun.lock
   - bun.lockb
-
+  - .goreleaser.yml
 rules:
   line-length:
     max: 120

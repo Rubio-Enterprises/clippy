@@ -37,11 +37,13 @@ below remains applicable except where this fork's policy explicitly differs.
   CI. `.mise.local.toml` pins upstream-compatible Go 1.25.3 and golangci-lint
   2.5.0; `mise run lint` checks the fork delta against `LINT_BASE_REF` (default
   `main`) rather than gating inherited upstream lint debt. Request a declared
-  macOS capability route centrally before enabling the injected gate.
-- Run `mise run test`: it serializes all clipboard tests with
-  `/tmp/clippy-pasteboard.lock`, disables the Go test cache, and writes a positive
-  executed-test count only after the suite and picker snapshot pass. Any other
-  clipboard operation must acquire the same mkdir lock and release it on exit.
+  macOS capability route centrally before enabling the injected gate. Lint
+  sidecars and `lefthook-local.yml` exclude upstream-only release/Draggy assets
+  from formatter churn and inherited lint debt.
+- `mise run test` runs uncached tests with `-p 1` and writes a positive test
+  count only after the suite and picker snapshot pass. On a shared development
+  host, wrap clipboard operations in the local `/tmp/clippy-pasteboard.lock`
+  mkdir lock; keep this host-specific coordination outside the test script.
 - Commits use lowercase, imperative Conventional Commits without attribution.
 
 ## CRITICAL: Never Credit Yourself
@@ -188,7 +190,7 @@ Clippy is a macOS clipboard tool that bridges the gap between terminal file oper
 
 ### Testing
 
-- Run tests with `mise run test` (sequential packages under the pasteboard lock)
+- Run tests with `mise run test` (sequential packages; acquire the local lock on shared hosts)
 - Check specific test framework by examining existing tests
 - Always verify implementation with tests before considering complete
 

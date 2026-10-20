@@ -1,0 +1,9 @@
+excludes = [
+  ".goreleaser.yml",
+  "build-clib.sh",
+  "dev/**",
+  "gui/**",
+  "mcp-server-contribution.md",
+  "scripts/build-mcpb.sh",
+  "server.json",
+]
