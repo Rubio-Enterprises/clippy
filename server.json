@@ -69,7 +69,7 @@
     },
     {
       "name": "copy_teams",
-      "description": "Copy CommonMark/GFM Markdown to the macOS clipboard as Teams-ready rich text. Reuses md2rich formatting inside a complete UTF-8 HTML document, with RTF for rich applications. Clippy writes no plain-text representation. Plain-text clipboard reads may return nothing or macOS-synthesized text from RTF, not the original Markdown; they cannot verify Teams formatting. Paste with normal Command-V into Microsoft Teams. This tool only copies content; it never sends or posts a message. Success confirms copying, not Teams rendering. The md2teams CLI uses the same renderer.",
+      "description": "Copy CommonMark/GFM Markdown to the macOS clipboard as Teams-ready rich text. Reuses md2rich formatting inside a complete UTF-8 HTML document. Teams renders a rich paste only with a complete HTML document and no plain text; when plain text is offered, it falls back to it and shows raw text. Clippy therefore writes only HTML and RTF, with no plain text. Plain-text-only apps (Terminal, editors) paste nothing, and plain-text clipboard reads return nothing by design. Paste with normal Command-V into Microsoft Teams. This tool only copies content; it never sends or posts a message. Success confirms copying, not Teams rendering. The md2teams CLI uses the same renderer.",
       "parameters": {
         "type": "object",
         "properties": {

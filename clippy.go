@@ -201,9 +201,11 @@ func CopyMarkdown(markdown string) error {
 	return nil
 }
 
-// CopyTeams renders Markdown as a full HTML document and copies it with RTF
-// for rich applications. It writes no plain-text representation, but macOS may
-// synthesize text from RTF. Empty Markdown leaves the clipboard unchanged.
+// CopyTeams renders Markdown as a full HTML document and copies only HTML and
+// RTF to one pasteboard item, with no plain text. Teams falls back to plain text
+// when it is offered and shows raw text; plain-text-only apps (Terminal, editors)
+// therefore paste nothing. Empty or whitespace-only Markdown returns an error
+// without changing the clipboard.
 func CopyTeams(markdown string) error {
 	if strings.TrimSpace(markdown) == "" {
 		return fmt.Errorf("markdown is required")

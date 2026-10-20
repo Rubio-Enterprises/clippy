@@ -121,7 +121,11 @@ Examples:
 
   # Render Markdown for rich paste into Gmail and other email composers
   clippy md2rich                       # Read Markdown from clipboard, replace it with rich content
-  clippy md2teams notes.md             # Render Markdown as Teams-ready HTML and RTF
+
+  # Render Markdown for rich paste into Microsoft Teams
+  clippy md2teams notes.md             # Teams: complete HTML + RTF only, no plain text
+  # Teams falls back to raw text when plain text is offered.
+  # Plain-text-only apps (Terminal, editors) therefore paste nothing.
 
 Configuration:
   Create ~/.clippy.conf with:
@@ -375,14 +379,13 @@ func newMD2TeamsCommand() *cobra.Command {
 
 Reads the named file, piped stdin, or the current clipboard contents.
 
-Teams on macOS has been observed to render rich pastes when HTML is a complete
-document and no plain text is available. Clippy writes HTML and RTF only, never
-a plain-text representation. However, macOS may synthesize plain text from RTF;
-Teams rendering is not verified by copying successfully.
+Teams on macOS renders a rich paste only when HTML is a complete document and
+no plain text is offered. When plain text is offered, Teams falls back to it
+and shows raw text. Clippy therefore writes only HTML and RTF — no plain text.
+Successful copying does not verify Teams rendering.
 
-Plain-text-only apps (Terminal, editors) paste nothing unless macOS supplies
-RTF-derived text. Re-running md2teams on its own output finds no Markdown
-source on the clipboard: it may find only that synthesized, unformatted text.
+Plain-text-only apps (Terminal, editors) therefore paste nothing. Re-running
+md2teams on its own output finds no Markdown on the clipboard.
 
 Use CommonMark/GFM syntax, including **bold** and ~~strikethrough~~.
 

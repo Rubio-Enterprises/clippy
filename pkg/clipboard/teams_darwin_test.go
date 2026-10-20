@@ -33,6 +33,7 @@ func TestCopyTeamsRichTextWritesRichRepresentations(t *testing.T) {
 			t.Errorf("%s = %q (present=%v), want exact bytes %q", tc.typeName, got, ok, tc.want)
 		}
 	}
+	// In-process reads may translate RTF to plain text without an explicit plain-text representation.
 	if text, ok := GetText(); ok && text != "Hello" {
 		t.Errorf("GetText() = %q; want only RTF-derived text, never stale text or HTML source", text)
 	}

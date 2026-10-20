@@ -193,14 +193,15 @@ clippy md2teams                 # read Markdown from the clipboard
 ```
 
 `md2teams` uses the same formatting as `md2rich`, wrapped in a complete UTF-8
-HTML document. Teams has been observed to render rich pastes with a full HTML
-document and no plain text. Clippy writes HTML and an RTF fallback, without
-writing a plain-text representation; macOS may still synthesize text from RTF.
-Successful copying does not verify how Teams renders the paste.
+HTML document. Teams on macOS renders a rich paste only when the HTML is a
+complete document and no plain text is offered. When plain text is offered,
+Teams falls back to it and shows raw text. Clippy therefore writes only HTML
+and RTF — no plain text. Successful copying does not verify how Teams renders
+the paste.
 
-Plain-text-only apps paste nothing unless macOS supplies that synthesized text.
+Plain-text-only apps (Terminal, editors) therefore paste nothing.
 The clipboard no longer contains the Markdown source, so re-running `md2teams`
-on its own output may find no text or only unformatted, RTF-derived text.
+on its own output finds no Markdown on the clipboard.
 Keep the source file for subsequent edits. The `copy_teams` MCP tool accepts
 the same CommonMark/GFM Markdown and only copies; it never sends or posts.
 

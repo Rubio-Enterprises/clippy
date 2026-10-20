@@ -687,6 +687,9 @@ func CopyRichText(htmlContent string, rtfContent []byte, plainText string) error
 	}
 }
 
+// CopyTeamsRichText copies ordered RTF and HTML representations to a single
+// pasteboard item, with no plain text so Teams does not fall back to raw text.
+// HTML is encoded as UTF-8; callers must supply a complete HTML document.
 func CopyTeamsRichText(htmlContent string, rtfContent []byte) error {
 	htmlBytes := []byte(htmlContent)
 
