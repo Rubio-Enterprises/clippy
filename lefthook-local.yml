@@ -1,0 +1,6 @@
+pre-commit:
+  commands:
+    treefmt:
+      stage_fixed: false
+    shellcheck:
+      exclude: "dev/**"

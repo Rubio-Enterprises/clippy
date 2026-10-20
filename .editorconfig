@@ -1,10 +1,18 @@
-# Unix-style newlines with a newline ending every file
-[*]
-insert_final_newline = true
-end_of_line = lf
-trim_trailing_whitespace = true
+root = true
 
-[*.{ex,exs,leex,sface,js,css,scss}]
-indent_style=space
-# same as specifying tab width
-indent_size=2
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+[*.{py,rs}]
+indent_size = 4
+
+[*.go]
+indent_style = tab
+
+[Makefile]
+indent_style = tab
