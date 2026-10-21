@@ -31,6 +31,7 @@ type CopyEmailArgs struct {
 	Signoff      string `json:"signoff,omitempty" jsonschema:"description=Closing and signature, using newlines where line breaks should remain"`
 }
 
+// CopyTeamsArgs defines arguments for the Teams-ready rich message tool.
 type CopyTeamsArgs struct {
 	Markdown string `json:"markdown"`
 }

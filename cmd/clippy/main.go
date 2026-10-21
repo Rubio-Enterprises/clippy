@@ -394,7 +394,7 @@ Examples:
   cat release-notes.md | clippy md2teams
   clippy md2teams            # renders Markdown already on the clipboard`,
 		Args: cobra.MaximumNArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, args []string) error {
 			markdown, err := markdownInput(args)
 			if err != nil {
 				return err
