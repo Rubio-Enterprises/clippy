@@ -6,7 +6,7 @@ permissions: {}
 
 jobs:
   disabled:
-    runs-on: ${{ fromJSON(vars.RUNNERS || '{}').light || fromJSON('["ubuntu-slim"]') }}
+    runs-on: ${{ fromJSON(vars.RUNNERS || '{}').small || fromJSON('["ubuntu-slim"]') }}
     timeout-minutes: 1
     steps:
       - run: echo "Draggy is upstream-owned; this fork never releases it."
