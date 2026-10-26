@@ -21,7 +21,11 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
-      - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4
+      - uses: Rubio-Enterprises/.github/actions/standards-bootstrap@427623d6179953834b50c1663facac001aed0700 # v4
+        with:
+          app-id: ${{ secrets.STANDARDS_READER_APP_ID }}
+          private-key: ${{ secrets.STANDARDS_READER_APP_PRIVATE_KEY }}
+          keep-route: false
       - name: Lint fork changes
         env:
           LINT_BASE_REF: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}

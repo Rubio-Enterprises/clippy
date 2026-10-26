@@ -38,7 +38,7 @@ below remains applicable except where this fork's policy explicitly differs.
   2.5.0; `mise run lint` checks the fork delta against `LINT_BASE_REF` (default
   `main`) rather than gating inherited upstream lint debt. Request a declared
   macOS capability route centrally before enabling the injected gate. Lint
-  sidecars and `lefthook-local.yml` exclude upstream-only release/Draggy assets
+  stubs and `lefthook-local.yml` exclude upstream-only release/Draggy assets
   from formatter churn and inherited lint debt.
 - `mise run test` runs uncached tests with `-p 1` and writes a positive test
   count only after the suite and picker snapshot pass. On a shared development
@@ -190,6 +190,9 @@ Clippy is a macOS clipboard tool that bridges the gap between terminal file oper
 
 ### Testing
 
+- After cloning or creating a worktree, run `mise trust && mise bootstrap --only repos,tools --yes`
+  before any mise task or hook. Afterwards `mise run setup` refreshes the Shared Config Checkout
+  and installs Go dependencies. Shared hooks and Config Stubs fail without `.standards-config/`.
 - Run tests with `mise run test` (sequential packages; acquire the local lock on shared hosts)
 - Check specific test framework by examining existing tests
 - Always verify implementation with tests before considering complete
@@ -209,7 +212,7 @@ Clippy is a macOS clipboard tool that bridges the gap between terminal file oper
 go build -o clippy ./cmd/clippy
 go build -o pasty ./cmd/pasty
 
-# Test (includes the pasteboard lock and TUI snapshot)
+# Test (acquire the host pasteboard lock first; includes the TUI snapshot)
 mise run test
 
 # Install
