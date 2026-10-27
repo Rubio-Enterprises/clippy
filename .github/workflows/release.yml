@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   bump:
-    uses: Rubio-Enterprises/.github/.github/workflows/bump-brew.yml@083a18b5fd4ae40bd54a67296c016fbf998ab7e5 # v3.8.0
+    uses: Rubio-Enterprises/.github/.github/workflows/bump-brew.yml@427623d6179953834b50c1663facac001aed0700 # v4
     with:
       formula-name: clippy
     secrets:
