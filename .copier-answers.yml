@@ -1,6 +1,6 @@
 # Changes here will be overwritten by Copier; NEVER edit this file manually.
-_commit: template/v1.55.152
-_rubio_template_version: template/v1.55.152
+_commit: template/v1.55.155
+_rubio_template_version: template/v1.55.155
 _src_path: https://github.com/Rubio-Enterprises/standards.git
 config_model: native
 default_branch: main
@@ -34,6 +34,7 @@ is_public: true
 lint_hooks_workload_class: light
 project_name: clippy
 repo_type: extended_fork
+standards_channel: stable
 supported_platforms: []
 typecheck_workload_class: light
 upstream_branch: main
