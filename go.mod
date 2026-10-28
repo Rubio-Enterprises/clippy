@@ -1,6 +1,6 @@
 module github.com/neilberkman/clippy
 
-go 1.25
+go 1.25.0
 
 require (
 	github.com/charmbracelet/bubbletea v1.3.10
@@ -12,7 +12,7 @@ require (
 	github.com/olebedev/when v1.1.0
 	github.com/spf13/cobra v1.10.1
 	github.com/yuin/goldmark v1.8.2
-	golang.org/x/image v0.32.0
+	golang.org/x/image v0.41.0
 )
 
 require (
@@ -45,6 +45,6 @@ require (
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/yosida95/uritemplate/v3 v3.0.2 // indirect
 	golang.org/x/sys v0.37.0 // indirect
-	golang.org/x/text v0.30.0 // indirect
+	golang.org/x/text v0.37.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
