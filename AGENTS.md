@@ -191,7 +191,7 @@ Clippy is a macOS clipboard tool that bridges the gap between terminal file oper
 ### Testing
 
 - After cloning or creating a worktree, run `mise trust && mise bootstrap --only repos,tools --yes`
-  before any mise task or hook. Afterwards `mise run setup` refreshes the Shared Config Checkout
+  before any mise task or hook. Afterwards `mise run setup` refreshes the Shared Config Directory
   and installs Go dependencies. Shared hooks and Config Stubs fail without `.standards-config/`.
 - Run tests with `mise run test` (sequential packages; acquire the local lock on shared hosts)
 - Check specific test framework by examining existing tests
