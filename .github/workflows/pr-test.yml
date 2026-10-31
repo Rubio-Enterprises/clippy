@@ -6,6 +6,7 @@ name: PR Lint and Build
 
 permissions:
   contents: read
+  packages: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
@@ -20,15 +21,16 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
-      - uses: Rubio-Enterprises/.github/actions/standards-bootstrap@main
+      - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4
         with:
-          app-id: ${{ secrets.STANDARDS_READER_APP_ID }}
-          private-key: ${{ secrets.STANDARDS_READER_APP_PRIVATE_KEY }}
-          keep-route: false
+          install: false
+      - name: Install the standards package, the tools and the git hooks
+        run: mise run setup
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
       - name: Lint fork changes
         env:
           LINT_BASE_REF: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
-        run: mise run lint
+        run: mise run lint:go
       - name: Build CLI tools
         run: mise run build

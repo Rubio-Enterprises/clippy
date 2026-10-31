@@ -1,5 +1,7 @@
 # Clippy agent context
 
+<!-- agnix-disable CC-MEM-014 -- upstream's long guidance plus the fork's notes; splitting into .claude/rules/ is a follow-up -->
+
 `AGENTS.md` is canonical; `CLAUDE.md` is a symlink to it. The upstream guidance
 below remains applicable except where this fork's policy explicitly differs.
 
@@ -23,7 +25,7 @@ below remains applicable except where this fork's policy explicitly differs.
   accepts only `v*-strubio.*`; `release-draggy.yml` stays inert; `pr-test.yml`
   runs macOS changed-code lint and builds. Canonical tests, including the tmux
   picker regression, live in `test-gate.yml` without duplicate PR test execution.
-- This is a merge-mode Sync Target (`upstream_url` in `.copier-answers.yml`).
+- This is a merge-mode Sync Target (the `upstream-url` repository property).
   `upstream` is the controller-owned, pure mirror of upstream `main`, never a
   working branch or PR target. Review `central/upstream-sync` Sync PRs into
   `main`; humans merge them with merge commits, never squash or rebase. All PRs
@@ -32,16 +34,13 @@ below remains applicable except where this fork's policy explicitly differs.
 - The Go floor applies; the Swift floor does not apply to upstream-owned Draggy
   and debug tools. `is_mcp_server` is a JS/TS-only template answer and is absent
   for this Go MCP server, not a claim that MCP support is absent.
-- Central `enforce_lint_hooks` is temporarily off: its Go-only route is Linux,
-  incompatible with AppKit/cgo. Keep local lefthook hooks and macOS lint/build
-  CI. `.mise.local.toml` pins upstream-compatible Go 1.25.3 and golangci-lint
-  2.5.0; `mise run lint` checks the fork delta against `LINT_BASE_REF` (default
-  `main`) rather than gating inherited upstream lint debt. Request a declared
-  macOS capability route centrally before enabling the injected gate. Lint
-  stubs and `lefthook-local.yml` exclude upstream-only release/Draggy assets
-  from formatter churn and inherited lint debt.
-- `mise run test` runs uncached tests with `-p 1` and writes a positive test
-  count only after the suite and picker snapshot pass. On a shared development
+- The code uses AppKit through cgo, so Go lint, build and tests need macOS. `mise.toml` pins
+  upstream-compatible Go 1.25.3 and golangci-lint 2.5.0; `mise run lint:go` checks the fork
+  delta against `LINT_BASE_REF` (default `main`) rather than gating inherited upstream lint debt.
+  The injected `standards` check runs on Linux unless the repository's `ci-platform` property is
+  `macos`. `lefthook.override.yml` keeps upstream-only release/Draggy assets out of the Fixers.
+- `mise run test` runs uncached tests with `-p 1` (JUnit in `reports/test/`), then the
+  picker snapshot. On a shared development
   host, wrap clipboard operations in the local `/tmp/clippy-pasteboard.lock`
   mkdir lock; keep this host-specific coordination outside the test script.
 - Commits use lowercase, imperative Conventional Commits without attribution.
@@ -186,20 +185,20 @@ Clippy is a macOS clipboard tool that bridges the gap between terminal file oper
 - Library-first architecture - implement features as library functions first
 - Follow existing patterns and conventions
 - Use existing dependencies (check go.mod before adding new ones)
-- Never add comments unless explicitly requested
+- Add comments only when explicitly requested; let names and structure explain the code
 
 ### Testing
 
-- After cloning or creating a worktree, run `mise trust && mise bootstrap --only repos,tools --yes`
-  before any mise task or hook. Afterwards `mise run setup` refreshes the Shared Config Directory
-  and installs Go dependencies. Shared hooks and Config Stubs fail without `.standards-config/`.
+- After cloning or creating a worktree, run `mise trust && mise run setup` before any mise task or
+  hook: it installs `@rubio-enterprises/standards` into `.standards/`, the tools and the git hooks
+  (it needs a `NODE_AUTH_TOKEN` with `read:packages`). `mise run check` runs every Check.
 - Run tests with `mise run test` (sequential packages; acquire the local lock on shared hosts)
 - Check specific test framework by examining existing tests
 - Always verify implementation with tests before considering complete
 
 ### Git Workflow
 
-- Never commit changes unless explicitly requested
+- Leave changes uncommitted for review; commit only when explicitly requested
 - Clean commit messages without Claude credits
 - Use meaningful commit messages that explain the "why" not just the "what"
 
@@ -271,7 +270,7 @@ When you need to copy code that you're iteratively editing:
 
 - Edit the temp file incrementally with the Edit tool
 - Let clippy handle converting the file to clipboard text
-- Avoid regenerating entire code blocks for small changes
+- Edit only the lines a small change needs instead of regenerating entire code blocks
 - Makes iterative development much more efficient, especially for large files
 
 **Example workflow**:
