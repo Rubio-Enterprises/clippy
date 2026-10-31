@@ -1,5 +1,7 @@
 # Clippy agent context
 
+<!-- agnix-disable CC-MEM-014 -- upstream's long guidance plus the fork's notes; splitting into .claude/rules/ is a follow-up -->
+
 `AGENTS.md` is canonical; `CLAUDE.md` is a symlink to it. The upstream guidance
 below remains applicable except where this fork's policy explicitly differs.
 
@@ -183,7 +185,7 @@ Clippy is a macOS clipboard tool that bridges the gap between terminal file oper
 - Library-first architecture - implement features as library functions first
 - Follow existing patterns and conventions
 - Use existing dependencies (check go.mod before adding new ones)
-- Never add comments unless explicitly requested
+- Add comments only when explicitly requested; let names and structure explain the code
 
 ### Testing
 
@@ -196,7 +198,7 @@ Clippy is a macOS clipboard tool that bridges the gap between terminal file oper
 
 ### Git Workflow
 
-- Never commit changes unless explicitly requested
+- Leave changes uncommitted for review; commit only when explicitly requested
 - Clean commit messages without Claude credits
 - Use meaningful commit messages that explain the "why" not just the "what"
 
@@ -268,7 +270,7 @@ When you need to copy code that you're iteratively editing:
 
 - Edit the temp file incrementally with the Edit tool
 - Let clippy handle converting the file to clipboard text
-- Avoid regenerating entire code blocks for small changes
+- Edit only the lines a small change needs instead of regenerating entire code blocks
 - Makes iterative development much more efficient, especially for large files
 
 **Example workflow**:

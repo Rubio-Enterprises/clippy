@@ -33,7 +33,11 @@ run = '''npm install --prefix .standards --no-save --prefer-online --fetch-retri
 # clippy and pasty use macOS APIs through cgo: build, test and lint:go need macOS.
 [tasks.test]
 description = "Uncached sequential Go tests (gotestsum, JUnit for the Test Gate) and the TUI snapshot"
-run = "bash scripts/test-go.sh"
+run = [
+  "mkdir -p reports/test",
+  "gotestsum --junitfile=reports/test/junit.xml -- -count=1 -p 1 ./...",
+  "bash scripts/picker_snapshot_tmux.sh",
+]
 
 [tasks.build]
 description = "Build clippy and pasty on macOS"
