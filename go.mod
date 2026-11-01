@@ -10,7 +10,7 @@ require (
 	github.com/mark3labs/mcp-go v0.41.1
 	github.com/neilberkman/mimedescription v1.0.0
 	github.com/olebedev/when v1.1.0
-	github.com/spf13/cobra v1.10.1
+	github.com/spf13/cobra v1.10.2
 	github.com/yuin/goldmark v1.8.2
 	golang.org/x/image v0.32.0
 )
