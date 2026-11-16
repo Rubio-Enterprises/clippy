@@ -5,7 +5,7 @@ go 1.25
 require (
 	github.com/charmbracelet/bubbletea v1.3.10
 	github.com/charmbracelet/lipgloss v1.1.0
-	github.com/fsnotify/fsnotify v1.9.0
+	github.com/fsnotify/fsnotify v1.10.1
 	github.com/gabriel-vasile/mimetype v1.4.16
 	github.com/mark3labs/mcp-go v0.41.1
 	github.com/neilberkman/mimedescription v1.0.0
