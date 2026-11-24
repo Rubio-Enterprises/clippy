@@ -4,7 +4,7 @@
 
 Run project commands through `just`. Image Checks run in the dev image; macOS builds, tests and Checks use isolated repository-local tools.
 
-In a fresh checkout, run `just build`, then `just setup`. Use `just --list` to discover recipes.
+In a fresh checkout, run `just build-dev`, then `just setup`. Use `just --list` to discover recipes.
 
 Run clipboard tests only on an isolated macOS runner or VM, not the homelab desktop. `just test` runs the full suite and picker snapshot.
 
@@ -45,9 +45,9 @@ below remains applicable except where this fork's policy explicitly differs.
   for this Go MCP server, not a claim that MCP support is absent.
 - AppKit/cgo requires native macOS for Go lint, builds and tests. `image/mise.toml` and its
   lock own the tool pins. `just setup-macos` installs them under repository-local `.mise/`.
-  `just lint-go` checks the delta against `LINT_BASE_REF` (default `main`, or the GitHub event base).
   The injected check runs Go lint on Linux and through `just check-macos` on macOS, where
   AppKit/cgo files are included. Both use the shared golangci-lint Check and `.golangci.yml`.
+  The native Check also lints the delta against `LINT_BASE_REF` (default `main`, or the CI event base).
   SwiftLint uses the standards fork scope and `origin/upstream`, not a blanket GUI exclusion.
 - `just test` runs uncached tests with `-p 1` (JUnit in `reports/test/`), then the
   picker snapshot. On a shared development
@@ -222,7 +222,7 @@ Clippy is a macOS clipboard tool that bridges the gap between terminal file oper
 
 ```bash
 just package
-just lint-go
+just check-macos
 # Isolated macOS runner or VM only
 just test
 ```
